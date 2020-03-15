@@ -1,6 +1,8 @@
-import React from 'react';
+import React, {useState} from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
+import shortid from "shortid";
+
 
 class Panel extends React.Component{
 
@@ -11,66 +13,63 @@ class Panel extends React.Component{
         
 
         this.state = {
-            topLetter: "C",
-            bottomLetter: "D",
-            alphabet: "ABCDEFGHIJKLMNOPQRSTUVWXYZ",
+            target_letter: props.value,
+            alphabet: " ABCDEFGHIJKLMNOPQRSTUVWXYZ",
             count: 0,
         }
     }
 
+    getRandomKey = () => {
+        return shortid.generate();
+    }
+
 
     componentDidMount() {
-        //Need to update css to add animation
-
-        console.log("test");
-        this.timerID = setInterval(
-            () => this.next_letters(),
-            1000
-          );
-
+            this.timerID =  setInterval(
+            () => this.advanceLetter(),
+            250
+            )
     }
 
 
-    next_letters() {
-
-        //call animation
+    advanceLetter() {
+        if(this.state.alphabet[(this.state.count+1)%27] !== this.state.target_letter){
+            this.setState({count: (this.state.count + 1)%27})
+        }
         
-
-        
-        //Update letter
-        this.setState({count: this.state.count +1});
-        this.setState({topLetter: this.state.alphabet[this.state.count]});
-        console.log(this.state.alphabet[this.state.count]);
     }
 
-    componentWillUnmount() {
-
-    }
 
 
     render(){
         return (
-            <div className="flip-container">
+            <div className="flip-container">      
 
-            <div className="top">
-                <div className="letter-top"> {this.state.bottomLetter} </div>
+            <div class="top">
+                <div class="letter-top"> {this.state.alphabet[this.state.count+1]} </div>
             </div>
-        
-            <div className="flipper">
-        
-        		<div className="front">
-        			<div className="letter-top"> {this.state.topLetter} </div>
+            
+            <div key={this.getRandomKey()} class="flipper">
+            
+        		<div class="front">
+        			<div class="letter-top"> {this.state.alphabet[this.state.count]} </div>
         		</div>
 
-        		<div className="back">
-        			<div className="letter-bottom"> {this.state.bottomLetter} </div>
+        		<div class="back">
+        			<div class="letter-bottom"> {this.state.alphabet[this.state.count+1]}</div>
         		</div>
-        
+            
         	</div>
-        
-            <div className="bottom">
-                <div className="letter-bottom"> {this.state.topLetter} </div>
+            
+            <div class="bottom">
+                <div class="letter-bottom"> {this.state.alphabet[this.state.count]} </div>
             </div>
+
+            {/*Change from arrow so it can do more
+            <button className="magic" type="button" onClick={() => this.setState({count: this.state.count + 1})}> 
+                        Click for magic
+            </button>
+            */}
         </div>
         );
     }
@@ -78,13 +77,51 @@ class Panel extends React.Component{
 
 
 
+class Display extends React.Component{
+
+    constructor(props) {
+        super(props)
+
+        this.state = {
+            text: "HUZZAH",
+        }
+
+    }
 
 
+    renderPanel(i) {
+        return <Panel 
+            value={this.state.text[i]}
+        />;
+    }
+
+
+
+    render() {
+
+        return(
+
+            <div className="line">
+                {this.renderPanel(0)}
+                {this.renderPanel(1)}
+                {this.renderPanel(2)}
+                {this.renderPanel(3)}
+                {this.renderPanel(4)}
+                {this.renderPanel(5)}
+            </div>
+
+        )
+
+
+    }
+
+
+}
 
 
 
 
 ReactDOM.render(
-    <Panel />,
+    <Display />,
     document.getElementById('root')
 );

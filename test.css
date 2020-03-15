@@ -1,4 +1,5 @@
 .flip-container {
+    display: inline-block;
     perspective: 1000px;
     background-color: transparent;
     width: 300px;
@@ -10,7 +11,7 @@
 }
 
 .flipper {
-    position: absolute;
+  position: absolute;
     width: 100%;
     height: 100%;
     text-align: center;
@@ -21,14 +22,30 @@
 
 /*When container hovered over apply these styles to flippr class*/
 body:hover .flipper {
-    transform: rotateX(-180deg);
-    transform-origin: bottom center;
+
+    animation: flip 2.5s ease-in forwards;
+}
+
+
+@keyframes flip {
+    from {
+        transfrom: rotateX(0deg);
+        transform-origin: bottom center;
+    }
+    to {
+        transform: rotateX(-180deg);
+        transform-origin: bottom center;
+
+    }
 }
 
 
 
+
+
 .front, .back, .top, .bottom {
-    position: absolute;
+  display: inline-block;
+  position: absolute;
     width: 100%;
     height: 100%;
     -webkit-backface-visibility: hidden; /* Safari */
@@ -57,7 +74,8 @@ body:hover .flipper {
 }
 
 .back {
-    transform: rotateX(-180deg);
+  display: inline-block;
+  transform: rotateX(-180deg);
  }
 
 
