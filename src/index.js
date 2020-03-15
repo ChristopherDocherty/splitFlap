@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
 import shortid from "shortid";
@@ -32,10 +32,18 @@ class Panel extends React.Component{
     }
 
 
+    componentDidUpdate(prevProps) {
+        if (this.props.value !== prevProps.value){
+            this.setState({target_letter: this.props.value})
+        }
+    }
+
+
     advanceLetter() {
         if(this.state.alphabet[(this.state.count+1)%27] !== this.state.target_letter){
             this.setState({count: (this.state.count + 1)%27})
         }
+        console.log(this.state.target_letter);
         
     }
 
@@ -45,32 +53,27 @@ class Panel extends React.Component{
         return (
             <div className="flip-container">      
 
-            <div class="top">
-                <div class="letter-top"> {this.state.alphabet[this.state.count+1]} </div>
-            </div>
-            
-            <div key={this.getRandomKey()} class="flipper">
-            
-        		<div class="front">
-        			<div class="letter-top"> {this.state.alphabet[this.state.count]} </div>
-        		</div>
+                <div class="top">
+                    <div class="letter-top"> {this.state.alphabet[this.state.count+1]} </div>
+                </div>
 
-        		<div class="back">
-        			<div class="letter-bottom"> {this.state.alphabet[this.state.count+1]}</div>
-        		</div>
-            
-        	</div>
-            
-            <div class="bottom">
-                <div class="letter-bottom"> {this.state.alphabet[this.state.count]} </div>
-            </div>
+                <div key={this.getRandomKey()} class="flipper">
 
-            {/*Change from arrow so it can do more
-            <button className="magic" type="button" onClick={() => this.setState({count: this.state.count + 1})}> 
-                        Click for magic
-            </button>
-            */}
-        </div>
+        	    	<div class="front">
+        	    		<div class="letter-top"> {this.state.alphabet[this.state.count]} </div>
+        	    	</div>
+
+        	    	<div class="back">
+        	    		<div class="letter-bottom"> {this.state.alphabet[this.state.count+1]}</div>
+        	    	</div>
+
+        	    </div>
+
+                <div class="bottom">
+                    <div class="letter-bottom"> {this.state.alphabet[this.state.count]} </div>
+                </div>
+
+            </div>
         );
     }
 }
@@ -84,7 +87,9 @@ class Display extends React.Component{
 
         this.state = {
             text: "HUZZAH",
-        }
+        };
+
+        this.handleChange = this.handleChange.bind(this);
 
     }
 
@@ -96,27 +101,38 @@ class Display extends React.Component{
     }
 
 
+    handleChange(event){
+        this.setState({text: event.target.value});
+    }
+
 
     render() {
-
         return(
+            <div className="container">
+                <div className="line">
+                    {Array.from(this.state.text).map((letter) =>
+                        <Panel value={letter} />                
+                    )}
+                </div>
+   
+                    <label>
+                        Type something: 
+                        <input type="text" value={this.state.text} onChange={this.handleChange} />
+                    </label>
 
-            <div className="line">
-                {this.renderPanel(0)}
-                {this.renderPanel(1)}
-                {this.renderPanel(2)}
-                {this.renderPanel(3)}
-                {this.renderPanel(4)}
-                {this.renderPanel(5)}
+
             </div>
 
+
+
         )
-
-
     }
 
 
 }
+
+
+
 
 
 
