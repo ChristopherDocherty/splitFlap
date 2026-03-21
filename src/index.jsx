@@ -1,7 +1,6 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
+import { createRoot } from 'react-dom/client';
 import './index.css';
-import shortid from "shortid";
 
 
 class Panel extends React.Component{
@@ -10,7 +9,7 @@ class Panel extends React.Component{
 
     constructor(props){
         super(props);
-        
+
 
         this.state = {
             target_letter: props.value,
@@ -20,7 +19,7 @@ class Panel extends React.Component{
     }
 
     getRandomKey = () => {
-        return shortid.generate();
+        return crypto.randomUUID();
     }
 
 
@@ -44,14 +43,14 @@ class Panel extends React.Component{
             this.setState({count: (this.state.count + 1)%27})
         }
         console.log(this.state.target_letter);
-        
+
     }
 
 
 
     render(){
         return (
-            <div className="flip-container">      
+            <div className="flip-container">
 
                 <div class="top">
                     <div class="letter-top"> {this.state.alphabet[this.state.count+1]} </div>
@@ -95,7 +94,7 @@ class Display extends React.Component{
 
 
     renderPanel(i) {
-        return <Panel 
+        return <Panel
             value={this.state.text[i]}
         />;
     }
@@ -111,14 +110,15 @@ class Display extends React.Component{
             <div className="container">
                 <div className="line">
                     {Array.from(this.state.text).map((letter) =>
-                        <Panel value={letter} />                
+                        <Panel value={letter} />
                     )}
                 </div>
-   
+
                     <label>
-                        Type something: 
+                        Type something:
                         <input type="text" value={this.state.text} onChange={this.handleChange} />
                     </label>
+
 
 
             </div>
@@ -132,12 +132,4 @@ class Display extends React.Component{
 }
 
 
-
-
-
-
-
-ReactDOM.render(
-    <Display />,
-    document.getElementById('root')
-);
+createRoot(document.getElementById('root')).render(<Display />);
